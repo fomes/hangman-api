@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { PrismaClient } from "@prisma/client";
+import cors from "cors";
 
 const prisma = new PrismaClient();
 
@@ -8,6 +9,7 @@ const port = process.env.PORT || 3333;
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.status(200).send({ message: "Hello API" });
