@@ -16,7 +16,13 @@ app.get("/", (req, res) => {
 });
 
 app.get("/ranking", async (req, res) => {
-  const rank = await prisma.ranking.findMany({});
+  const rank = await prisma.ranking.findMany({
+    orderBy: [
+      {
+        points: "desc",
+      },
+    ],
+  });
 
   res.status(200).send({ rank });
 });
