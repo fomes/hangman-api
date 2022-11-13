@@ -27,6 +27,22 @@ app.get("/ranking", async (req, res) => {
   res.status(200).send({ rank });
 });
 
+app.get("/points/:nick", async (req, res) => {
+  const { nick } = req.params;
+
+  const rank = await prisma.ranking.findFirst({
+    where: {
+      nick,
+    },
+
+    select: {
+      points: true,
+    },
+  });
+
+  res.status(200).send({ rank });
+});
+
 app.post("/new", async (req, res) => {
   const { nick, points } = req.body;
 
