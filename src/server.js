@@ -27,24 +27,8 @@ app.get("/ranking", async (req, res) => {
   res.status(200).send({ rank });
 });
 
-app.get("/points/:nick", async (req, res) => {
-  const { nick } = req.params;
-
-  const rank = await prisma.ranking.findFirst({
-    where: {
-      nick,
-    },
-
-    select: {
-      points: true,
-    },
-  });
-
-  res.status(200).send({ rank });
-});
-
 app.post("/new", async (req, res) => {
-  const { nick, points } = req.body;
+  const { nick, gamePoints } = req.body;
 
   const alreadyNick = await prisma.ranking.findFirst({
     where: {
@@ -56,19 +40,31 @@ app.post("/new", async (req, res) => {
     await prisma.ranking.create({
       data: {
         nick,
-        points,
+        points: gamePoints,
       },
     });
   } else {
-    await prisma.ranking.update({
-      where: {
-        nick,
-      },
+    if (gamePoints) {
+      await prisma.ranking.update({
+        where: {
+          nick,
+        },
 
-      data: {
-        points,
-      },
-    });
+        data: {
+          points: gamePoints,
+        },
+      });
+    } else {
+      await prisma.ranking.update({
+        where: {
+          nick,
+        },
+
+        data: {
+          nick,
+        },
+      });
+    }
   }
 
   res.status(201).send({ message: "success" });
