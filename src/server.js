@@ -51,7 +51,7 @@ app.post("/new", async (req, res) => {
         },
 
         data: {
-          points: gamePoints,
+          points: gamePoints === 1 ? 0 : gamePoints,
         },
       });
     } else {
